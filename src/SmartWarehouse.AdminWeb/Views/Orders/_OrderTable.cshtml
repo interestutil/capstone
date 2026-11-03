@@ -1,0 +1,29 @@
+@model List<OrderSummaryDto>
+
+<div class="card">
+    <table class="data">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Branch</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Lines</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td class="mono">@order.Id</td>
+                <td>@order.BranchName</td>
+                <td>@order.Deadline.ToLocalTime().ToString("dd MMM HH:mm")</td>
+                <td><span class="badge @order.Status">@order.Status</span></td>
+                <td>@order.LineCount</td>
+                <td><a asp-action="Details" asp-route-id="@order.Id">Open</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

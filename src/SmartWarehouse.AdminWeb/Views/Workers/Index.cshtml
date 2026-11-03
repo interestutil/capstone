@@ -1,0 +1,33 @@
+@model List<WorkerDto>
+@{
+    ViewData["Title"] = "Workers";
+}
+
+<div class="page-head">
+    <div>
+        <h1>Workers</h1>
+        <p>Assign lines to these workers when you create an order.</p>
+    </div>
+</div>
+
+<div class="card">
+    <table class="data">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var worker in Model)
+        {
+            <tr>
+                <td>@worker.FullName</td>
+                <td>@worker.Email</td>
+                <td>@(worker.IsActive ? "Active" : "Inactive")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,15 @@
+@model InboundPageViewModel
+@{
+    ViewData["Title"] = "Inbound queue";
+}
+
+<div class="page-head">
+    <div>
+        <h1>Inbound queue</h1>
+        <p>Assign the designated shelf for the product type, or an empty shelf if that one is full. Stock counts when the worker confirms placement.</p>
+    </div>
+</div>
+
+<div data-poll-url="@Url.Action("Snapshot")">
+    <partial name="_InboundTable" model="Model" />
+</div>

@@ -1,0 +1,74 @@
+@model InventoryPageViewModel
+
+<div class="card">
+    <h2>Product totals</h2>
+    <table class="data">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>On hand</th>
+                <th>Committed</th>
+                <th>Available</th>
+                <th>Shelves</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var row in Model.Totals)
+        {
+            <tr>
+                <td>@row.ProductName</td>
+                <td>@row.OnHand</td>
+                <td>@row.Committed</td>
+                <td><strong>@row.Available</strong></td>
+                <td>@row.ShelfCount</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>Shelves</h2>
+    <table class="data">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Product</th>
+                <th>On hand</th>
+                <th>Committed</th>
+                <th>Available</th>
+                <th>Capacity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var shelf in Model.Shelves)
+        {
+            <tr>
+                <td class="mono">@shelf.Code</td>
+                <td>@shelf.ProductTypeName</td>
+                <td>@(shelf.ProductName ?? "—")</td>
+                <td>@shelf.OnHand</td>
+                <td>@shelf.Committed</td>
+                <td><strong>@shelf.Available</strong></td>
+                <td>@shelf.MaxCapacity</td>
+                <td>
+                    @if (shelf.IsEmpty)
+                    {
+                        <span class="badge empty">Empty</span>
+                    }
+                    else if (shelf.IsFull)
+                    {
+                        <span class="badge full">Full</span>
+                    }
+                    else
+                    {
+                        <span class="badge ok">Open</span>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

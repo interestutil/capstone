@@ -1,0 +1,24 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Admin sign in";
+}
+
+<div class="login-card">
+    <p class="hint">Pick-to-light warehouse</p>
+    <h1>Admin sign in</h1>
+    <p class="hint">The dashboard talks to the warehouse API. Workers use the Android app.</p>
+    <form asp-action="Login" method="post">
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+        <div asp-validation-summary="ModelOnly" class="flash bad"></div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" autocomplete="username" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" type="password" class="form-control" autocomplete="current-password" />
+        </div>
+        <button class="btn btn-amber w-100" type="submit">Sign in</button>
+    </form>
+    <p class="hint mt-3">Mock API: admin@warehouse.local / Admin123!</p>
+</div>

@@ -1,0 +1,75 @@
+@model OrderDetailPageViewModel
+@{
+    ViewData["Title"] = $"Order #{Model.Order.Id}";
+    var order = Model.Order;
+}
+
+<div class="page-head">
+    <div>
+        <h1>Order #@order.Id · @order.BranchName</h1>
+        <p>
+            Deadline @order.Deadline.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+            · <span class="badge @order.Status">@order.Status</span>
+        </p>
+    </div>
+    @if (order.Status == OrderStatuses.Assigned)
+    {
+        <form asp-action="Cancel" asp-route-id="@order.Id" method="post">
+            <button class="btn btn-outline-danger" type="submit">Cancel order</button>
+        </form>
+    }
+</div>
+
+<div class="card">
+    <table class="data">
+        <thead>
+            <tr>
+                <th>Seq</th>
+                <th>Shelf</th>
+                <th>Product</th>
+                <th>Cartons</th>
+                <th>Worker</th>
+                <th>Status</th>
+                <th>Handoff</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var line in order.Lines)
+        {
+            <tr>
+                <td>@line.PickSequence</td>
+                <td class="mono">@line.ShelfCode</td>
+                <td>@line.ProductName</td>
+                <td>@line.QtyCartons</td>
+                <td>@line.AssignedWorkerName</td>
+                <td><span class="badge @line.Status">@line.Status</span></td>
+                <td>@(line.HandedOffAt is null ? "—" : line.HandedOffAt.Value.ToLocalTime().ToString("HH:mm"))</td>
+                <td>
+                    @if (line.Status == LineStatuses.Pending)
+                    {
+                        <form asp-action="Reassign" method="post" class="d-flex gap-2">
+                            <input type="hidden" name="id" value="@order.Id" />
+                            <input type="hidden" name="lineId" value="@line.Id" />
+                            <select name="workerId" class="form-select form-select-sm">
+                                @foreach (var worker in Model.Workers)
+                                {
+                                    if (worker.Id == line.AssignedWorkerId)
+                                    {
+                                        <option value="@worker.Id" selected>@worker.FullName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@worker.Id">@worker.FullName</option>
+                                    }
+                                }
+                            </select>
+                            <button class="btn btn-sm btn-outline-secondary" type="submit">Reassign</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

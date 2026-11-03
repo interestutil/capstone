@@ -1,0 +1,72 @@
+@model CreateOrderViewModel
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Create order";
+    var jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+}
+
+<div class="page-head">
+    <div>
+        <h1>Create order</h1>
+        <p>Choose the shelf and the worker for every line. Stock is committed only if every line has available cartons.</p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="flash bad"></div>
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Branch</label>
+                <select asp-for="BranchId" class="form-select">
+                    @foreach (var branch in Model.Branches)
+                    {
+                        <option value="@branch.Id">@branch.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Deadline</label>
+                <input asp-for="Deadline" type="datetime-local" class="form-control" />
+            </div>
+        </div>
+
+        <h2>Lines</h2>
+        <div id="order-lines">
+            @for (var i = 0; i < Model.Lines.Count; i++)
+            {
+                <div class="line-row">
+                    <select name="Lines[@i].ProductId" class="form-select js-product" required>
+                        <option value="">Product</option>
+                        @foreach (var product in Model.Products)
+                        {
+                            <option value="@product.Id">@product.Name</option>
+                        }
+                    </select>
+                    <select name="Lines[@i].ShelfId" class="form-select js-shelf" required>
+                        <option value="">Shelf</option>
+                    </select>
+                    <input name="Lines[@i].QtyCartons" class="form-control" type="number" min="1" value="1" required />
+                    <select name="Lines[@i].AssignedWorkerId" class="form-select" required>
+                        <option value="">Worker</option>
+                        @foreach (var worker in Model.Workers)
+                        {
+                            <option value="@worker.Id">@worker.FullName</option>
+                        }
+                    </select>
+                    <span></span>
+                </div>
+            }
+        </div>
+        <button type="button" id="add-line" class="btn btn-outline-secondary mb-3">Add line</button>
+        <div>
+            <button class="btn btn-amber" type="submit">Commit order</button>
+        </div>
+    </form>
+</div>
+
+<div id="order-catalog"
+     data-products="@JsonSerializer.Serialize(Model.Products, jsonOptions)"
+     data-shelves="@JsonSerializer.Serialize(Model.Shelves, jsonOptions)"
+     data-workers="@JsonSerializer.Serialize(Model.Workers, jsonOptions)"
+     hidden></div>

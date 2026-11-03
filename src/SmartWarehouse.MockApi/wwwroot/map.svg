@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#e8e2d6"/>
+  <rect x="40" y="40" width="720" height="420" fill="#f4efe4" stroke="#2b3531" stroke-width="4"/>
+  <rect x="160" y="60" width="80" height="80" fill="#8d6b4a" stroke="#2b3531" stroke-width="2"/>
+  <rect x="280" y="60" width="80" height="80" fill="#8d6b4a" stroke="#2b3531" stroke-width="2"/>
+  <rect x="440" y="60" width="80" height="80" fill="#8d6b4a" stroke="#2b3531" stroke-width="2"/>
+  <rect x="560" y="60" width="80" height="80" fill="#8d6b4a" stroke="#2b3531" stroke-width="2"/>
+  <rect x="680" y="60" width="80" height="80" fill="#8d6b4a" stroke="#2b3531" stroke-width="2"/>
+  <rect x="160" y="300" width="80" height="80" fill="#8d6b4a" stroke="#2b3531" stroke-width="2"/>
+  <text x="200" y="104" text-anchor="middle" font-family="Arial" font-size="14" fill="#f4efe4">R1-L1</text>
+  <text x="320" y="104" text-anchor="middle" font-family="Arial" font-size="14" fill="#f4efe4">R1-L2</text>
+  <text x="480" y="104" text-anchor="middle" font-family="Arial" font-size="14" fill="#f4efe4">R2-L1</text>
+  <text x="600" y="104" text-anchor="middle" font-family="Arial" font-size="14" fill="#f4efe4">R2-L2</text>
+  <text x="720" y="104" text-anchor="middle" font-family="Arial" font-size="14" fill="#f4efe4">R2-L3</text>
+  <text x="200" y="344" text-anchor="middle" font-family="Arial" font-size="14" fill="#f4efe4">R3-L1</text>
+  <rect x="40" y="400" width="90" height="60" fill="#c45c26" stroke="#2b3531" stroke-width="2"/>
+  <text x="85" y="436" text-anchor="middle" font-family="Arial" font-size="14" fill="#fff">DOCK</text>
+  <line x1="80" y1="200" x2="720" y2="200" stroke="#b7c4b1" stroke-width="18"/>
+  <line x1="80" y1="200" x2="80" y2="430" stroke="#b7c4b1" stroke-width="18"/>
+</svg>

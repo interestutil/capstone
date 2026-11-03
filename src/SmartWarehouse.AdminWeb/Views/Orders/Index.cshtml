@@ -1,0 +1,23 @@
+@model OrderListViewModel
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<div class="page-head">
+    <div>
+        <h1>Orders</h1>
+        <p class="filters">
+            <a asp-action="Index">All</a>
+            <a asp-action="Index" asp-route-status="Assigned">Assigned</a>
+            <a asp-action="Index" asp-route-status="InProgress">In progress</a>
+            <a asp-action="Index" asp-route-status="AwaitingHandoff">Awaiting handoff</a>
+            <a asp-action="Index" asp-route-status="Completed">Completed</a>
+            <a asp-action="Index" asp-route-status="Cancelled">Cancelled</a>
+        </p>
+    </div>
+    <a class="btn btn-amber" asp-action="Create">Create order</a>
+</div>
+
+<div data-poll-url="@Url.Action("Snapshot", new { status = Model.Status })">
+    <partial name="_OrderTable" model="Model.Orders" />
+</div>

@@ -1,0 +1,70 @@
+@model InboundPageViewModel
+
+<div class="card">
+    <table class="data">
+        <thead>
+            <tr>
+                <th>Voucher</th>
+                <th>Product</th>
+                <th>Cartons</th>
+                <th>Worker</th>
+                <th>Shelf</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var inbound in Model.Records)
+        {
+            var product = Model.Products.FirstOrDefault(p => p.Id == inbound.ProductId);
+            <tr>
+                <td class="mono">@inbound.VoucherNumber</td>
+                <td>@inbound.ProductName</td>
+                <td>@inbound.QtyCartons</td>
+                <td>@inbound.CreatedByWorkerName</td>
+                <td class="mono">@(inbound.TargetShelfCode ?? "—")</td>
+                <td><span class="badge @inbound.Status">@inbound.Status</span></td>
+                <td>
+                    @if (inbound.Status != InboundStatuses.Placed)
+                    {
+                        var candidateShelves = Model.Shelves
+                            .Where(s => (s.ProductId == inbound.ProductId || s.IsEmpty) && !s.IsFull)
+                            .Where(s => s.MaxCapacity - s.OnHand >= inbound.QtyCartons)
+                            .OrderBy(s =>
+                            {
+                                var isDesignated = product != null && s.ProductTypeId == product.ProductTypeId;
+                                var holds = s.ProductId == inbound.ProductId;
+                                if (isDesignated && holds) return 0;
+                                if (isDesignated && s.IsEmpty) return 1;
+                                if (holds) return 2;
+                                return 3;
+                            })
+                            .ThenBy(s => s.Rack)
+                            .ThenBy(s => s.Level)
+                            .ToList();
+
+                        <form asp-action="Assign" method="post" class="d-flex gap-2">
+                            <input type="hidden" name="id" value="@inbound.Id" />
+                            <select name="shelfId" class="form-select form-select-sm" required>
+                                @foreach (var shelf in candidateShelves)
+                                {
+                                    var isDesignated = product != null && shelf.ProductTypeId == product.ProductTypeId;
+                                    var holds = shelf.ProductId == inbound.ProductId;
+                                    var prefix = (isDesignated && holds) ? "★ [Designated]" :
+                                                 (isDesignated && shelf.IsEmpty) ? "★ [Designated Empty]" :
+                                                 holds ? "[Holds Product]" : "[Fallback Empty]";
+                                    var room = shelf.MaxCapacity - shelf.OnHand;
+                                    <option value="@shelf.Id">
+                                        @prefix @shelf.Code · @(shelf.IsEmpty ? "empty" : $"holds {shelf.ProductName}") · room @room
+                                    </option>
+                                }
+                            </select>
+                            <button class="btn btn-sm btn-amber" type="submit">Assign</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

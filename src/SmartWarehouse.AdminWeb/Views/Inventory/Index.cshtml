@@ -1,0 +1,20 @@
+@model InventoryPageViewModel
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<div class="page-head">
+    <div>
+        <h1>Inventory</h1>
+        <p>Per-shelf OnHand, Committed and Available. The dashboard refreshes by polling.</p>
+    </div>
+</div>
+
+@if (ViewBag.Error is string apiError)
+{
+    <div class="flash bad">@apiError</div>
+}
+
+<div data-poll-url="@Url.Action("Snapshot")" data-poll-interval="4000">
+    <partial name="_InventorySnapshot" model="Model" />
+</div>
